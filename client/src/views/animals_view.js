@@ -4,7 +4,8 @@ this.render = this.render.bind(this);
 }
 
 AnimalsView.prototype.render = function(data) {
-  console.log(this);
+  console.log(data);
+  this.ul.innerHTML = ''
   for (var animal of data){
     li = document.createElement('li');
     li.innerText = "Name: "+ animal.name + " Type: " + animal.type;

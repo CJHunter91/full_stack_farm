@@ -31,8 +31,6 @@ animalRouter.post('/', function(req, res){
   db.collection('animals').insert({
     name: req.body.name,
     type: req.body.type
-    }, function(err, response){
-      res.json(response)
     });
   db.collection('animals').find().toArray(function(err,results){
     if(err) console.log("oops" + err);
