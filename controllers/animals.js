@@ -27,14 +27,18 @@ animalRouter.get('/', function(req, res){
 
 //create
 animalRouter.post('/', function(req, res){
+  console.log(req.body)
   db.collection('animals').insert({
     name: req.body.name,
     type: req.body.type
+    }, function(err, response){
+      res.json(response)
     });
   db.collection('animals').find().toArray(function(err,results){
     if(err) console.log("oops" + err);
     res.json(results);
   })
+
 })
 //delete
 

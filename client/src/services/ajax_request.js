@@ -16,4 +16,18 @@ AjaxRequest.prototype.get = function(callback) {
   request.send();
 }
 
+AjaxRequest.prototype.post = function(callback, body){
+  var request = new XMLHttpRequest();
+  request.open("POST", this.url);
+  request.setRequestHeader("Content-type", "application/json");
+  request.onload = function(){
+    if(request.status === 200){
+      var jsonString = request.responseText;
+      this.data = JSON.parse(jsonString);
+      callback(this.data);
+    }
+  }.bind(this);
+  request.send(JSON.stringify(body));
+}
+
 module.exports = AjaxRequest;

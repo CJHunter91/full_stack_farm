@@ -72,7 +72,14 @@ var AnimalsView = __webpack_require__(2);
 
 function app(){
   var animalsData = new AjaxRequest('http://localhost:3000/api/animals');
-  var animalsView = new AnimalsView(animalsData);
+  var ul = document.querySelector('#animals')
+  var form = document.querySelector('#animal-form');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var body = {name: this.name.value, type: this.type.value};
+    animalsData.post(animalsView.render, body);
+  })
+  var animalsView = new AnimalsView(ul);
   animalsData.get(animalsView.render);
 }
 
@@ -100,18 +107,38 @@ AjaxRequest.prototype.get = function(callback) {
   request.send();
 }
 
+AjaxRequest.prototype.post = function(callback, body){
+  var request = new XMLHttpRequest();
+  request.open("POST", this.url);
+  request.setRequestHeader("Content-type", "application/json");
+  request.onload = function(){
+    if(request.status === 200){
+      var jsonString = request.responseText;
+      this.data = JSON.parse(jsonString);
+      callback(this.data);
+    }
+  }.bind(this);
+  request.send(JSON.stringify(body));
+}
+
 module.exports = AjaxRequest;
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
-var AnimalsView = function(){
-
+var AnimalsView = function(ul){
+this.ul = ul;
+this.render = this.render.bind(this);
 }
 
 AnimalsView.prototype.render = function(data) {
-  console.log(data);
+  console.log(this);
+  for (var animal of data){
+    li = document.createElement('li');
+    li.innerText = "Name: "+ animal.name + " Type: " + animal.type;
+    this.ul.appendChild(li);
+  };
 };
 
 module.exports = AnimalsView;
